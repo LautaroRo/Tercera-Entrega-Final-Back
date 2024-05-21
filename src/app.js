@@ -1,21 +1,22 @@
 import express from "express"
 import session from "express-session"
 import MongoStore from "connect-mongo"
-import mongoose from "mongoose"
 import handlebars from "express-handlebars"
 import _dirnamee from "./utils.js"
 import passport from "passport"
 import initializePassport from "./config/passportConfig.js"
-import usersRouter from "./routes/usersRouter.js"
-import sessionsRouter from "./routes/routerSessions.js"
-
+import routerSessions from "./routes/routerSessions.js"
+import { entorno } from "./config/variables.config.js"
+import routerViews from "./routes/routerViews.js"
+import routerProducts from "./routes/routerProducts.js"
+import routerCart from "./routes/routerCart.js"
+import { Server } from "socket.io"
+import { users } from "./dao/factory.js"
+import { entorno } from "./config/variables.config.js"
 const app = express()
 
 
 
-const DBURL =
-"mongodb+srv://Lautaro:Ors6E5ixvF0N1pVh@cluster0.beeo5kk.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-mongoose.connect(DBURL); 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(_dirnamee + "/public"))
@@ -23,10 +24,10 @@ app.use(express.static(_dirnamee + "/public"))
 app.use(
     session({
         store: new MongoStore({
-            mongoUrl: DBURL,
+            mongoUrl: entorno.MONGOURL,
             ttl:3600
         }),
-        secret: "Secret",
+        secret: entorno.SECRETO,
         resave: false,
         saveUninitialized: false
     })
@@ -40,7 +41,22 @@ app.engine("handlebars", handlebars.engine())
 app.set("views", _dirnamee + "/views")
 app.set("view engine", "handlebars")
 
-app.use("/", usersRouter)
-app.use("/api/sessions", sessionsRouter)
+app.use("/", routerViews.getRouter())
+app.use("/api/sessions", routerSessions.getRouter())
+app.use("/api/products", routerProducts.getRouter())
+app.use("/api/cart", routerCart.getRouter())
 
-app.listen( 4000, console.log("Corriendo"))
+const servidor = app.listen( entorno.PORT, console.log("Corriendo"))
+
+const io = new Server(servidor)
+const msg = []
+io.on("connection", socket => {
+
+    socket.on("message", (data) => {
+        msg.push(data)
+        users.createMessage(data)
+        io.emit("messageLogs", msg)
+
+    })
+
+})
