@@ -4,6 +4,7 @@ import MongoStore from "connect-mongo"
 import handlebars from "express-handlebars"
 import _dirnamee from "./utils.js"
 import passport from "passport"
+import nodemailer from "nodemailer"
 import initializePassport from "./config/passportConfig.js"
 import routerSessions from "./routes/routerSessions.js"
 import { entorno } from "./config/variables.config.js"
@@ -12,10 +13,9 @@ import routerProducts from "./routes/routerProducts.js"
 import routerCart from "./routes/routerCart.js"
 import { Server } from "socket.io"
 import { users } from "./dao/factory.js"
-import { entorno } from "./config/variables.config.js"
+
+
 const app = express()
-
-
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -35,6 +35,8 @@ app.use(
 initializePassport()
 app.use(passport.initialize())
 app.use(passport.session())
+
+
 
 
 app.engine("handlebars", handlebars.engine())
