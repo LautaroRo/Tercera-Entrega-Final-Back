@@ -13,14 +13,14 @@ import routerProducts from "./routes/routerProducts.js"
 import routerCart from "./routes/routerCart.js"
 import { Server } from "socket.io"
 import { users } from "./dao/factory.js"
-
+import cookieParser from "cookie-parser"
 
 const app = express()
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(_dirnamee + "/public"))
-
+app.use(cookieParser())
 app.use(
     session({
         store: new MongoStore({

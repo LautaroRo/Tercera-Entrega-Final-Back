@@ -33,7 +33,7 @@ class routerCart extends RouterMain{
         const user = await users.getUserById(cart.user)
 
         if(product.stock < cantidad) return res.send("No hay suficiente stock")
-        if(user.role === "Admin") return res.send("Lo sentimos solo los usuarios pueden agregar productos en el carrito")
+        if(user.role !== "Usuario") return res.send("Lo sentimos solo los usuarios pueden agregar productos en el carrito")
 
         users.addProductInCart(cid,pid,cantidad)
 

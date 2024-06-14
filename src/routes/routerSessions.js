@@ -6,19 +6,35 @@ class routeUsers extends RouterMain{
     init(){
         this.get("/Profile", this.traerUsuarios)
         this.post('/register', passport.authenticate('register', { 
-            failureRedirect: '/failRegister' 
-        }));
+            failureRedirect: '/failRegister'
+        }), (req, res) => {
+            try{
+
+                res.json({status: "succes"})
+
+            }catch(error){
+                res.json({status: error})
+            }
+        });
+        
+
         
         this.post('/login', passport.authenticate('login'), (req, res) => {
             try{
-                req.session.user = {
+                const objeto = {
                     first_name: req.user.first_name,
                     last_name: req.user.last_name,
                     email: req.user.email,
                     role: req.user.role,
                     id: req.user._id
                 };
-                res.json({succes: req.session.user})
+
+                req.session.user = objeto
+
+                res.cookie('user', JSON.stringify(objeto), { maxAge: 3600000  });
+
+                res.send("Login exitoso"); 
+
             }catch{
                 res.send("No se logro")
             }

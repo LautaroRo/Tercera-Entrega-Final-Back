@@ -14,10 +14,8 @@ const initializePassport = () => {
             async (req, username, password, done) => {
 
                 const { first_name, last_name, role, number, age, email } = req.body
-
+                console.log("hola")
                 try {
-                    console.log('Email:', email); // Verifica el contenido del email
-                    console.log('From:', entorno.MAIL_USERNAME); // Verifica el contenido de MAIL_USERNAME
                     const user = await users.getOne(username);
 
                     if (user) {
@@ -44,7 +42,7 @@ const initializePassport = () => {
             
                     const result = await users.createUser(newUser)
 
-                    console.log(email)
+                    console.log(result)
                     await transport.sendMail({
                         from:`Correo de prueba <${entorno.MAIL_USERNAME}/>`,
                         to: email,
@@ -57,7 +55,6 @@ const initializePassport = () => {
                             </div>
                         `
                     })
-
                     return done(null, result)
                 } catch (error) {
                     return done(error)

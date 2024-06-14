@@ -30,6 +30,12 @@ class users {
         return result
     }
 
+    updateUser = async (user) => {
+        const result = await userModel.updateOne({email: user.email}, {$set: user})
+
+        return result
+    }
+
     createMessage = async (message) => {
         let result = await messagesModel.create(message)
         return result

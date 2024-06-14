@@ -1,0 +1,16 @@
+<div>
+    {{#each products}}
+        <div class="product">
+            <h2>{{this.title}}</h2>
+            <p><strong>Descripción:</strong> {{this.description}}</p>
+            <p><strong>Categoría:</strong> {{this.category}}</p>
+            <p><strong>Marca:</strong> {{this.brands}}</p>
+            <p><strong>Stock:</strong> {{this.stock}}</p>
+            <p><strong>Precio:</strong> {{this.price}}</p>
+            <p><strong>Propietario:</strong> {{this.owner}}</p>
+            <button id={{this._id}} class="button"></button>
+        </div>
+    {{/each}}
+</div>
+
+<script src="/js/deleteProduct.js"></script>

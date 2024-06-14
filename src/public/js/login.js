@@ -14,7 +14,7 @@ form.addEventListener("submit", (e) => {
         },
     }).then((response) => {
         if (response.status === 200) {
-            window.location.replace("/profile");
+            window.location.replace("/perfil");
         } else {
             console.log("algo salio mal");
         }

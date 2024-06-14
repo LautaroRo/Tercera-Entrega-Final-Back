@@ -3,7 +3,7 @@ const socket = io()
 let user;
 let role;
 const open = () => {
-    fetch("http://localhost:4000/user", {
+    fetch("http://localhost:3030/user", {
         method: "GET",
         headers: {
             "Content-Type": "application/json",
@@ -24,7 +24,6 @@ const open = () => {
         .catch((error) => {
             console.error("Error al obtener los datos:", error);
         });
-
 
 
 }
